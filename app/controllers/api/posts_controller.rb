@@ -21,7 +21,7 @@ module Api
     end
 
     def update
-      if find_post.update(post_params)
+      if post.update(post_params)
         render json: post
       else
         render json: post.errors, status: :unprocessable_entity
@@ -29,7 +29,7 @@ module Api
     end
 
     def destroy
-      find_post.destroy
+      post.destroy
       head :no_content
     end
 
@@ -39,7 +39,7 @@ module Api
       params.require(:post).permit(:username, :title, :body)
     end
 
-    def find_post
+    def post
       @post = Post.find(params[:id])
     end
   end
