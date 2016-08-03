@@ -2,43 +2,35 @@ module Api
   class PostsController < ApplicationController
 
     def index
-      if @posts = Post.all
-        render json: @posts, status: 200
-      else
-        unsuccess_search 404
-      end
+      @posts = Post.all
+      render json: @posts
     end
 
     def show
-      if find_post
-        render json: @post, status:200
-      else
-        unsuccess_search 404
-      end
+      render json: find_post
     end
 
     def create
-      if @post = Post.create(post_params)
-        success_search 201
+      post = Post.new(post_params)
+
+      if post.save
+        render json: post, status: :created
       else
-        unsuccess_search 500
+        render json: post.errors, status: :unprocessable_entity
       end
     end
 
     def update
       if find_post.update(post_params)
-        success_search 200
+        render json: post
       else
-        unsuccess_search 404
+        render json: post.errors, status: :unprocessable_entity
       end
     end
 
     def destroy
-      if find_post.destroy
-        success_search 200
-      else
-        unsuccess_search 404
-      end
+      find_post.destroy
+      head :no_content
     end
 
     private
@@ -49,14 +41,6 @@ module Api
 
     def find_post
       @post = Post.find(params[:id])
-    end
-
-    def success_search(http_status)
-      render json: { message: 'success' }, status: http_status
-    end
-
-    def unsuccess_search(http_status)
-      render nothing: true, status: http_status
     end
   end
 end
