@@ -7,7 +7,7 @@ module Api
     end
 
     def show
-      render json: find_post
+      render json: post
     end
 
     def create
