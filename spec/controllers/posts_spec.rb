@@ -1,11 +1,11 @@
 require "rails_helper"
 
 module Api
-  describe PostsController, type: :controller do
+  describe PostsController, type: :request do
 
     describe "GET #index" do
       let!(:posts) { FactoryGirl.create_list(:post, 2) }
-      before { get :index }
+      before { get "/api/posts/" }
 
       it "has a 200 status code" do
         expect(response.status).to eq(200)
@@ -18,7 +18,8 @@ module Api
 
     describe "POST #create" do
         it "saves the new post in the database" do
-          expect { post :create, params: { post: FactoryGirl.attributes_for(:post) } }.
+          post "/api/posts/#{post.id}", params: { post: FactoryGirl.attributes_for(:post) }
+          expect {  }.
             to change(Post, :count).by(1)
           expect(response.status).to eq(201)
         end
@@ -27,7 +28,7 @@ module Api
     describe "creates post before action" do
       let!(:post) { FactoryGirl.create(:post) }
       describe "GET #show" do
-        before { get :show, params: { id: post } }
+        before { get "/api/posts/#{post.id}", params: { id: post } }
 
         it "assigns the requested post to @post" do
           expect(assigns(:post)).to eq post
@@ -36,7 +37,7 @@ module Api
 
       describe "PUT #update" do
         it "changes post title" do
-          put :update, params: { id: post.id, 
+          put "/api/posts/#{post.id}", params: { id: post.id, 
                                  post: FactoryGirl.attributes_for(:post, title: "new title")
                                }
           post.reload
@@ -46,7 +47,7 @@ module Api
 
       describe "DELETE #destroy" do
         it "deletes post" do
-          expect { delete :destroy, params: { id: post.id } }.
+          expect { delete "/api/posts/#{post.id}", params: { id: post.id } }.
             to change(Post, :count).by(-1)
         end
       end
