@@ -17,12 +17,11 @@ module Api
     end
 
     describe "POST #create" do
-        it "saves the new post in the database" do
-          post "/api/posts/#{post.id}", params: { post: FactoryGirl.attributes_for(:post) }
-          expect {  }.
-            to change(Post, :count).by(1)
-          expect(response.status).to eq(201)
-        end
+      it "saves the new post in the database" do
+        post "/api/posts/", params: { post: FactoryGirl.attributes_for(:post) }
+        expect(response.content_type).to eq("application/json")
+        expect(response.status).to eq(201)
+      end
     end
 
     describe "creates post before action" do
@@ -37,9 +36,10 @@ module Api
 
       describe "PUT #update" do
         it "changes post title" do
-          put "/api/posts/#{post.id}", params: { id: post.id, 
-                                 post: FactoryGirl.attributes_for(:post, title: "new title")
-                               }
+          put "/api/posts/#{post.id}", params:
+            { id: post.id, 
+              post: FactoryGirl.attributes_for(:post, title: "new title")
+            }
           post.reload
           expect(post.title).to eq "new title"
         end
