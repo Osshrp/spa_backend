@@ -5,7 +5,7 @@ module Api
 
     describe "GET #index" do
       let!(:posts) { FactoryGirl.create_list(:post, 2) }
-      before { get "/api/posts/" }
+      before { get api_posts_url }
 
       it "has a 200 status code" do
         expect(response.status).to eq(200)
@@ -18,7 +18,7 @@ module Api
 
     describe "POST #create" do
       it "saves the new post in the database" do
-        post "/api/posts/", params: { post: FactoryGirl.attributes_for(:post) }
+        post api_posts_url, params: { post: FactoryGirl.attributes_for(:post) }
         expect(response.content_type).to eq("application/json")
         expect(response.body).to include("created")
         expect(response.status).to eq(201)
@@ -28,7 +28,7 @@ module Api
     describe "creates post before action" do
       let!(:post) { FactoryGirl.create(:post) }
       describe "GET #show" do
-        before { get "/api/posts/#{post.id}", params: { id: post } }
+        before { get api_post_path(post), params: { id: post } }
 
         it "assigns the requested post to @post" do
           expect(response.body).to eq post.to_json
@@ -37,7 +37,7 @@ module Api
 
       describe "PUT #update" do
         it "changes post title" do
-          put "/api/posts/#{post.id}", params:
+          put api_post_path(post), params:
             { id: post.id, 
               post: FactoryGirl.attributes_for(:post, title: "new title")
             }
@@ -47,7 +47,7 @@ module Api
 
       describe "DELETE #destroy" do
         it "deletes post" do
-          expect { delete "/api/posts/#{post.id}", params: { id: post.id } }.
+          expect { delete api_post_path(post), params: { id: post.id } }.
             to change(Post, :count).by(-1)
         end
       end
