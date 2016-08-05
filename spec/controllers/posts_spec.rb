@@ -12,7 +12,7 @@ module Api
       end
 
       it "populates an array of all posts" do
-        expect(assigns(:posts)).to match_array(posts)
+        expect(response.body).to eq(posts.to_json)
       end
     end
 
@@ -20,6 +20,7 @@ module Api
       it "saves the new post in the database" do
         post "/api/posts/", params: { post: FactoryGirl.attributes_for(:post) }
         expect(response.content_type).to eq("application/json")
+        expect(response.body).to include("created")
         expect(response.status).to eq(201)
       end
     end
@@ -30,7 +31,7 @@ module Api
         before { get "/api/posts/#{post.id}", params: { id: post } }
 
         it "assigns the requested post to @post" do
-          expect(assigns(:post)).to eq post
+          expect(response.body).to eq post.to_json
         end
       end
 
@@ -40,8 +41,7 @@ module Api
             { id: post.id, 
               post: FactoryGirl.attributes_for(:post, title: "new title")
             }
-          post.reload
-          expect(post.title).to eq "new title"
+          expect(JSON.parse(response.body)["title"]).to eq "new title"
         end
       end
 
