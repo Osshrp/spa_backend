@@ -17,3 +17,5 @@
 .byebug_history
 config/database.yml
 .rvmrc
+config/provision/keys/*
+config/provision/settings.yml
