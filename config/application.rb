@@ -29,7 +29,7 @@ module SpaBackend
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'localhost', '127.0.0.1'
+        origins 'localhost', '127.0.0.1', 'http://s3-us-west-2.amazonaws.com'
         resource '*', :headers => :any, :methods => [:get, :post,
                                                      :delete, :put,
                                                      :patch, :options,
