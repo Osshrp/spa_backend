@@ -27,15 +27,15 @@ module SpaBackend
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins 'localhost', '127.0.0.1', 'http://s3-us-west-2.amazonaws.com'
-        resource '*', :headers => :any, :methods => [:get, :post,
-                                                     :delete, :put,
-                                                     :patch, :options,
-                                                     :head]
-      end
-    end
+    # config.middleware.insert_before 0, Rack::Cors do
+    #   allow do
+    #     origins 'http://oss.bobrptd.ru.s3.amazonaws.com'
+    #     resource '*', :headers => :any, :methods => [:get, :post,
+    #                                                  :delete, :put,
+    #                                                  :patch, :options,
+    #                                                  :head]
+    #   end
+    # end
 
   end
 end
